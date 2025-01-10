@@ -10,7 +10,7 @@ const cars = [
     doors: 4,
     price: 22000,
     available: "yes",
-    image: "images/first car toyota.jpg",
+    image: "./images/first car toyota.jpg",
   },
   {
     id: 2,
@@ -20,7 +20,7 @@ const cars = [
     doors: 4,
     price: 25000,
     available: "yes",
-    image: "images/honda civic second.webp",
+    image: "./images/honda civic second.webp",
   },
   {
     id: 3,
@@ -30,7 +30,7 @@ const cars = [
     doors: 2,
     price: 35000,
     available: "no",
-    image: "images/mustant 3.png",
+    image: "./images/mustant 3.png",
   },
   {
     id: 4,
@@ -40,7 +40,7 @@ const cars = [
     doors: 4,
     price: 45000,
     available: "yes",
-    image: "images/BMW 3 Series 4.png",
+    image: "./images/BMW 3 Series 4.png",
   },
   {
     id: 5,
@@ -50,7 +50,7 @@ const cars = [
     doors: 2,
     price: 32000,
     available: "no",
-    image: "images/Chavrolet 5.jpg",
+    image: "./images/Chavrolet 5.jpg",
   },
   {
     id: 6,
@@ -60,7 +60,7 @@ const cars = [
     doors: 4,
     price: 42000,
     available: "yes",
-    image: "images/audi a4 6.jpg",
+    image: "./images/audi a4 6.jpg",
   },
   {
     id: 7,
@@ -70,7 +70,7 @@ const cars = [
     doors: 4,
     price: 50000,
     available: "yes",
-    image: "images/mercedes e klasa 7.jpg",
+    image: "./images/mercedes e klasa 7.jpg",
   },
   {
     id: 8,
@@ -80,7 +80,7 @@ const cars = [
     doors: 4,
     price: 38000,
     available: "no",
-    image: "images/lexus 8.webp",
+    image: "./images/lexus 8.webp",
   },
   {
     id: 9,
@@ -90,7 +90,7 @@ const cars = [
     doors: 4,
     price: 28000,
     available: "yes",
-    image: "images/golf 9.jpg",
+    image: "./images/golf 9.jpg",
   },
   {
     id: 10,
@@ -100,12 +100,12 @@ const cars = [
     doors: 4,
     price: 32000,
     available: "yes",
-    image: "images/subaru 10.png",
+    image: "./images/subaru 10.png",
   },
 ];
 
 const carCont = document.querySelector(".car-cont");
-const carList = document.querySelector("car-lists");
+const carList = document.querySelector(".car-list");
 
 // console.log(cars);
 
@@ -159,16 +159,7 @@ const carCreator = function () {
   };
 };
 
-// const car = carCreator();
-
-// const carManager = function () {
-//   const cars = [];
-// };
-
-// const carItem = function () {
 for (let i = 0; i < cars.length; i++) {
-  // console.log(cars[i].name);
-
   const car = carCreator();
 
   car.setName(cars[i].name);
@@ -178,7 +169,28 @@ for (let i = 0; i < cars.length; i++) {
   car.setPrice(cars[i].price);
   car.setAvlbl(cars[i].available);
   car.setImg(cars[i].image);
-  console.log(car.getCar());
+  // console.log(car.getCar());
+
+  const item = document.createElement("li");
+  item.classList.add("car-item");
+  item.setAttribute("data-id", car.getId());
+  item.innerHTML = `<div class="img-cont">
+              <h3 class="car-name">${car.getName()}</h3>
+              <img class="car-img" src="${car.getImg()}" />
+            </div>
+            <div class="specifications-cont">
+              <p>Brand:<span>${car.getBrand()}</span></p>
+              <p>Manufactured Year:<span>${car.getYear()}</span></p>
+              <p>Doors:<span>${car.getDoors()}</span></p>
+              <p>Price:<span>$${car.getPrice()}</span></p>
+            </div>
+            <div class="availability-cont">
+              <div class="available-btn">Available: <span>${car.getAvlbl()}</span></div>
+            </div>
+            <div class="del-cont">
+              <button class="delete-btn">Delete</button>
+            </div>`;
+  // prettier-ignore
+  car.getAvlbl() === "no" && (item.querySelector(".available-btn").style.backgroundColor = "rgb(214, 81, 81)");
+  carList.appendChild(item);
 }
-// };
-// carItem();
