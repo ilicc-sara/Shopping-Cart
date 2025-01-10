@@ -194,3 +194,10 @@ for (let i = 0; i < cars.length; i++) {
   car.getAvlbl() === "no" && (item.querySelector(".available-btn").style.backgroundColor = "rgb(214, 81, 81)");
   carList.appendChild(item);
 }
+
+const selectAvlbl = document.querySelector(".select-available");
+console.log(selectAvlbl);
+
+selectAvlbl.addEventListener("input", function () {
+  console.log(selectAvlbl.value);
+});
