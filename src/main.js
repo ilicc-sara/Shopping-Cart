@@ -104,6 +104,9 @@ const cars = [
   },
 ];
 
+const carCont = document.querySelector(".car-cont");
+const carList = document.querySelector("car-lists");
+
 console.log(cars);
 
 const carCreator = function () {
@@ -111,15 +114,46 @@ const carCreator = function () {
     id: crypto.randomUUID(),
     name: "",
     brand: "",
-    manufacturedYear: "",
+    year: "",
     doors: "",
     price: "",
     available: true,
     img: "",
   };
   const getId = () => car.id;
+  const getName = () => car.name;
+  const getBrand = () => car.brand;
+  const getYear = () => car.year;
+  const getDoors = () => car.doors;
+  const getPrice = () => car.price;
+  const getAvlbl = () => car.available;
+  const changeStatus = (value) => (car.available = value);
+  const getImg = () => car.img;
+  const setImg = (value) => (car.img = value);
 
-  return { getId };
+  return {
+    getId,
+    getName,
+    getBrand,
+    getYear,
+    getDoors,
+    getPrice,
+    getAvlbl,
+    changeStatus,
+    getImg,
+    setImg,
+  };
 };
 
-const car = carCreator();
+// const car = carCreator();
+
+// const carManager = function () {
+//   const cars = [];
+// };
+
+const carItem = function () {
+  for (let i; i > cars.length; i++) {
+    console.log([i]);
+  }
+};
+carItem();
