@@ -107,19 +107,19 @@ const cars = [
 const carCont = document.querySelector(".car-cont");
 const carList = document.querySelector(".car-list");
 
-// console.log(cars);
-
-const carCreator = function () {
-  const car = {
-    id: crypto.randomUUID(),
-    name: "",
-    brand: "",
-    year: "",
-    doors: "",
-    price: "",
-    available: true,
-    img: "",
-  };
+const carCreator = function (carArg) {
+  // const car = {
+  //   id: crypto.randomUUID(),
+  //   name: "",
+  //   brand: "",
+  //   year: "",
+  //   doors: "",
+  //   price: "",
+  //   available: true,
+  //   img: "",
+  // };
+  // const cars = [];
+  const car = carArg;
   const getCar = () => car;
   const getId = () => car.id;
   const getName = () => car.name;
@@ -159,8 +159,20 @@ const carCreator = function () {
   };
 };
 
+const carManagerCreator = function () {
+  const cars = [];
+
+  const addToCars = (car) => cars.push(car);
+  const getCars = () => cars;
+
+  return { addToCars, getCars };
+};
+
+const carManager = carManagerCreator();
+
 for (let i = 0; i < cars.length; i++) {
-  const car = carCreator();
+  const car = carCreator(cars[i]);
+  carManager.addToCars(car);
 
   car.setName(cars[i].name);
   car.setBrand(cars[i].brand);
@@ -193,7 +205,17 @@ for (let i = 0; i < cars.length; i++) {
   // prettier-ignore
   car.getAvlbl() === "no" && (item.querySelector(".available-btn").style.backgroundColor = "rgb(214, 81, 81)");
   carList.appendChild(item);
+
+  item.addEventListener("click", function (e) {
+    if (!e.target.classList.contains("delete-btn")) return;
+    const deleteEl = e.target.closest(".car-item");
+    // deleteEl.remove();
+
+    console.log(e.target.closest(".car-item").getAttribute("data-id"));
+    console.log(car.getId());
+  });
 }
+carManager.getCars().forEach((car) => console.log(car.getCar()));
 
 const selectAvlbl = document.querySelector(".select-available");
 console.log(selectAvlbl);
