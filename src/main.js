@@ -107,18 +107,9 @@ const cars = [
 const carCont = document.querySelector(".car-cont");
 const carList = document.querySelector(".car-list");
 
+const selectAvlbl = document.querySelector(".select-available");
+
 const carCreator = function (carArg) {
-  // const car = {
-  //   id: crypto.randomUUID(),
-  //   name: "",
-  //   brand: "",
-  //   year: "",
-  //   doors: "",
-  //   price: "",
-  //   available: true,
-  //   img: "",
-  // };
-  // const cars = [];
   const car = carArg;
   const getCar = () => car;
   const getId = () => car.id;
@@ -136,7 +127,7 @@ const carCreator = function (carArg) {
   const setPrice = (value) => (car.price = value);
   const getAvlbl = () => car.available;
   const setAvlbl = (value) => (car.available = value);
-  const getImg = () => car.img;
+  const getImg = () => car.image;
   const setImg = (value) => (car.img = value);
 
   return {
@@ -160,12 +151,14 @@ const carCreator = function (carArg) {
 };
 
 const carManagerCreator = function () {
-  const cars = [];
+  let cars = [];
 
   const addToCars = (car) => cars.push(car);
   const getCars = () => cars;
 
-  return { addToCars, getCars };
+  const filter = (value) => (cars = cars.filter(value));
+
+  return { addToCars, getCars, filter };
 };
 
 const carManager = carManagerCreator();
@@ -174,13 +167,13 @@ for (let i = 0; i < cars.length; i++) {
   const car = carCreator(cars[i]);
   carManager.addToCars(car);
 
-  car.setName(cars[i].name);
-  car.setBrand(cars[i].brand);
-  car.setYear(cars[i].manufacturedYear);
-  car.setDoors(cars[i].doors);
-  car.setPrice(cars[i].price);
-  car.setAvlbl(cars[i].available);
-  car.setImg(cars[i].image);
+  // car.setName(cars[i].name);
+  // car.setBrand(cars[i].brand);
+  // car.setYear(cars[i].manufacturedYear);
+  // car.setDoors(cars[i].doors);
+  // car.setPrice(cars[i].price);
+  // car.setAvlbl(cars[i].available);
+  // car.setImg(cars[i].image);
   // console.log(car.getCar());
 
   const item = document.createElement("li");
@@ -208,18 +201,81 @@ for (let i = 0; i < cars.length; i++) {
 
   item.addEventListener("click", function (e) {
     if (!e.target.classList.contains("delete-btn")) return;
-    const deleteEl = e.target.closest(".car-item");
-    // deleteEl.remove();
 
-    console.log(e.target.closest(".car-item").getAttribute("data-id"));
-    console.log(car.getId());
+    console.log(
+      e.target.closest(".car-item").getAttribute("data-id") ===
+        String(car.getId())
+    );
+
+    const index = carManager
+      .getCars()
+      .findIndex(
+        (car) =>
+          String(car.getId()) ===
+          e.target.closest(".car-item").getAttribute("data-id")
+      );
+    console.log(index);
+    carManager.getCars().splice(index, 1);
+    carManager.getCars().forEach((car) => console.log(car.getCar()));
+    const deleteEl = e.target.closest(".car-item");
+    deleteEl.remove();
   });
 }
 carManager.getCars().forEach((car) => console.log(car.getCar()));
 
-const selectAvlbl = document.querySelector(".select-available");
-console.log(selectAvlbl);
-
 selectAvlbl.addEventListener("input", function () {
   console.log(selectAvlbl.value);
+
+  if (selectAvlbl.value === "available") {
+    // carManager.filter((car) => car.getAvlbl() === "yes");
+    carManager.getCars().forEach((car) => console.log(car.getId()));
+    carList.innerHTML = "";
+
+    for (let i = 0; i < cars.length; i++) {
+      console.log(carManager.getCars()[i]);
+      // console.log(carManager.getCars()[i].getId());
+
+      //   const item = document.createElement("li");
+      //   item.classList.add("car-item");
+      //   item.setAttribute("data-id", carManager.getCars()[i].getId());
+      //   item.innerHTML = `<div class="img-cont">
+      //               <h3 class="car-name">${carManager.getCars()[i].getName()}</h3>
+      //               <img class="car-img" src="${carManager
+      //                 .getCars()
+      //                 [i].getImg()}" />
+      //             </div>
+      //             <div class="specifications-cont">
+      //               <p>Brand:<span>${carManager
+      //                 .getCars()
+      //                 [i].getBrand()}</span></p>
+      //               <p>Manufactured Year:<span>${carManager
+      //                 .getCars()
+      //                 [i].getYear()}</span></p>
+      //               <p>Doors:<span>${carManager
+      //                 .getCars()
+      //                 [i].getDoors()}</span></p>
+      //               <p>Price:<span>$${carManager
+      //                 .getCars()
+      //                 [i].getPrice()}</span></p>
+      //             </div>
+      //             <div class="availability-cont">
+      //               <div class="available-btn">Available: <span>${carManager
+      //                 .getCars()
+      //                 [i].getAvlbl()}</span></div>
+      //             </div>
+      //             <div class="del-cont">
+      //               <button class="delete-btn">Delete</button>
+      //             </div>`;
+      //   // prettier-ignore
+      //   carManager.getCars()[i].getAvlbl() === "no" && (item.querySelector(".available-btn").style.backgroundColor = "rgb(214, 81, 81)");
+      //   carList.appendChild(item);
+    }
+  }
+  if (selectAvlbl.value === "not-available") {
+    carManager.filter((car) => car.getAvlbl() === "no");
+
+    for (let i = 0; i < cars.length; i++) {}
+  }
 });
+
+carManager.getCars().forEach((car) => console.log(car.getCar()));
