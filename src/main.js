@@ -108,6 +108,8 @@ const carList = document.querySelector(".car-list");
 
 const selectAvlbl = document.querySelector(".select-available");
 
+const selectSort = document.querySelector(".select-sort");
+
 const carCreator = function (carArg) {
   const car = carArg;
   const getCar = () => car;
@@ -271,27 +273,70 @@ const setUI = function (arr) {
   }
 };
 
-selectAvlbl.addEventListener("input", function () {
-  console.log(selectAvlbl.value);
-  if (selectAvlbl.value === "all") {
+selectAvlbl.addEventListener("input", function (e) {
+  console.log(e.target.value);
+  if (e.target.value === "all") {
     carList.innerHTML = "";
     defaultUI();
   }
 
-  if (selectAvlbl.value === "available") {
+  if (e.target.value === "available") {
     // prettier-ignore
     const carsAvailable = carManager.getCars().filter(car => car.getAvlbl() === 'yes');
     carsAvailable.forEach((car) => console.log(car.getCar()));
     carList.innerHTML = "";
 
     setUI(carsAvailable);
+    // carsAvailable.splice(0, carsAvailable.length);
   }
-  if (selectAvlbl.value === "not-available") {
+  if (e.target.value === "not-available") {
     // prettier-ignore
     const carsNotAvailable = carManager.getCars().filter((car) => car.getAvlbl() === "no");
     carsNotAvailable.forEach((car) => console.log(car.getCar()));
     carList.innerHTML = "";
 
     setUI(carsNotAvailable);
+    // carsNotAvailable.splice(0, carsNotAvailable.length);
+  }
+});
+
+selectSort.addEventListener("input", function (e) {
+  console.log(selectSort.value);
+
+  if (e.target.value === "a-z") {
+    // prettier-ignore
+    const carsSortedAZ = carManager.getCars().sort((a,b) => (a.getName() > b.getName()) ? 1 : ((b.getName() > a.getName()) ? -1 : 0));
+    carsSortedAZ.forEach((car) => console.log(car.getName()));
+
+    carList.innerHTML = "";
+
+    setUI(carsSortedAZ);
+  }
+  if (e.target.value === "z-a") {
+    // prettier-ignore
+    const carsSortedZA = carManager.getCars().sort((a,b) => (b.getName() > a.getName()) ? 1 : ((a.getName() > b.getName()) ? -1 : 0));
+    carsSortedZA.forEach((car) => console.log(car.getName()));
+
+    carList.innerHTML = "";
+
+    setUI(carsSortedZA);
+  }
+  if (e.target.value === "price-lowest") {
+    // prettier-ignore
+    const priceHighest = carManager.getCars().sort((a,b) => (a.getPrice() > b.getPrice()) ? 1 : ((b.getPrice() > a.getPrice()) ? -1 : 0));
+    priceHighest.forEach((car) => console.log(car.getPrice()));
+
+    carList.innerHTML = "";
+
+    setUI(priceHighest);
+  }
+  if (e.target.value === "price-highest") {
+    // prettier-ignore
+    const priceHighest = carManager.getCars().sort((a,b) => (b.getPrice() > a.getPrice()) ? 1 : ((a.getPrice() > b.getPrice()) ? -1 : 0));
+    priceHighest.forEach((car) => console.log(car.getPrice()));
+
+    carList.innerHTML = "";
+
+    setUI(priceHighest);
   }
 });
