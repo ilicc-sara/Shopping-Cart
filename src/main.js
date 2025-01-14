@@ -1,7 +1,7 @@
 "use strict";
 import "./style.css";
 
-const cars = [
+const carsData = [
   {
     id: 1,
     name: "Toyota Corolla",
@@ -155,10 +155,13 @@ const carManagerCreator = function () {
   let currentFilter;
   let currentSort;
   let cars = [];
-
+  let freshCars;
   // prettier-ignore
-  const filterAndSort = () =>
-    (cars = cars.filter((car) => car.getAvlbl() === currentFilter).sort((a,b) => (a.getName() > b.getName()) ? 1 : ((b.getName() > a.getName()) ? -1 : 0)));
+  const filterAndSort = () => {
+    freshCars = carsData.map(car => carCreator(car));
+
+    (cars = freshCars.filter((car) => car.getAvlbl() === currentFilter)).sort((a,b) => {});
+  }
 
   const setCurrentFilter = (value) => (currentFilter = value);
   const setCurrentSort = (value) => (currentSort = value);
@@ -184,9 +187,9 @@ const carManagerCreator = function () {
 const carManager = carManagerCreator();
 
 const defaultUI = function () {
-  for (let i = 0; i < cars.length; i++) {
+  for (let i = 0; i < carsData.length; i++) {
     // carList.innerHTML = "";
-    const car = carCreator(cars[i]);
+    const car = carCreator(carsData[i]);
     carManager.addToCars(car);
 
     // car.setName(cars[i].name);
