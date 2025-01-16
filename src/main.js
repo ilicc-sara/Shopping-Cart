@@ -112,47 +112,22 @@ const selectSort = document.querySelector(".select-sort");
 
 const carCreator = function (carArg) {
   const car = carArg;
+
   const getCar = () => car;
   const getId = () => car.id;
   const getName = () => car.name;
-  const setName = (value) => (car.name = value);
   const getBrand = () => car.brand;
-  const setBrand = (value) => (car.brand = value);
-
-  const getYear = () => car.year;
-  const setYear = (value) => (car.year = value);
-
+  const getYear = () => car.manufacturedYear;
   const getDoors = () => car.doors;
-  const setDoors = (value) => (car.doors = value);
   const getPrice = () => car.price;
-  const setPrice = (value) => (car.price = value);
   const getAvlbl = () => car.available;
-  const setAvlbl = (value) => (car.available = value);
   const getImg = () => car.image;
-  const setImg = (value) => (car.image = value);
-
-  return {
-    getCar,
-    getId,
-    getName,
-    setName,
-    getBrand,
-    setBrand,
-    getYear,
-    setYear,
-    getDoors,
-    setDoors,
-    getPrice,
-    setPrice,
-    getAvlbl,
-    setAvlbl,
-    getImg,
-    setImg,
-  };
+  // prettier-ignore
+  return {getCar, getId, getName, getBrand, getYear, getDoors, getPrice, getAvlbl, getImg};
 };
 
 const carManagerCreator = function () {
-  let currentFilter;
+  let currentFilter = "all";
   let currentSort;
   let cars = [];
   let freshCars;
@@ -160,13 +135,21 @@ const carManagerCreator = function () {
   const filterAndSort = () => {
     freshCars = carsData.map(car => carCreator(car));
 
-    (cars = freshCars.filter((car) => car.getAvlbl() == currentFilter)).sort((a,b) => {
-      if (currentSort === ("z-a")) return (a.getName() < b.getName()) ? 1 : ((b.getName() < a.getName()) ? -1 : 0);
-      if (currentSort === ("a-z")) return (a.getName() > b.getName()) ? 1 : ((b.getName() > a.getName()) ? -1 : 0);
-      if (currentSort === ("price-lowest")) return (a.getPrice() > b.getPrice()) ? 1 : ((b.getPrice() > a.getPrice()) ? -1 : 0);
-      if (currentSort === ("price-highest")) return (a.getName() < b.getName()) ? 1 : ((b.getName() < a.getName()) ? -1 : 0);
+    if (currentFilter === 'all') {
+      cars = freshCars.sort((a,b) => { 
+        if (currentSort === ("z-a")) return (a.getName() < b.getName()) ? 1 : ((b.getName() < a.getName()) ? -1 : 0);
+        if (currentSort === ("a-z")) return (a.getName() > b.getName()) ? 1 : ((b.getName() > a.getName()) ? -1 : 0);
+        if (currentSort === ("price-lowest")) return (a.getPrice() > b.getPrice()) ? 1 : ((b.getPrice() > a.getPrice()) ? -1 : 0);
+        if (currentSort === ("price-highest")) return (a.getName() < b.getName()) ? 1 : ((b.getName() < a.getName()) ? -1 : 0);
+        })
+    } else {
+      (cars = freshCars.filter((car) => car.getAvlbl() == currentFilter)).sort((a,b) => { //*************************************************************************************/
+        if (currentSort === ("z-a")) return (a.getName() < b.getName()) ? 1 : ((b.getName() < a.getName()) ? -1 : 0);
+        if (currentSort === ("a-z")) return (a.getName() > b.getName()) ? 1 : ((b.getName() > a.getName()) ? -1 : 0);
+        if (currentSort === ("price-lowest")) return (a.getPrice() > b.getPrice()) ? 1 : ((b.getPrice() > a.getPrice()) ? -1 : 0);
+        if (currentSort === ("price-highest")) return (a.getName() < b.getName()) ? 1 : ((b.getName() < a.getName()) ? -1 : 0);
       });
- 
+    }
   }
   const getFreshCars = () => freshCars;
 
@@ -178,18 +161,8 @@ const carManagerCreator = function () {
 
   const setCars = (value) => (cars = value);
 
-  const emptyCarsArr = () => (cars = []);
-
-  return {
-    filterAndSort,
-    getFreshCars,
-    setCurrentFilter,
-    setCurrentSort,
-    addToCars,
-    getCars,
-    setCars,
-    emptyCarsArr,
-  };
+  // prettier-ignore
+  return {filterAndSort, getFreshCars, setCurrentFilter, setCurrentSort, addToCars, getCars, setCars};
 };
 
 const carManager = carManagerCreator();
@@ -225,11 +198,6 @@ const defaultUI = function () {
 
     item.addEventListener("click", function (e) {
       if (!e.target.classList.contains("delete-btn")) return;
-
-      // console.log(
-      //   e.target.closest(".car-item").getAttribute("data-id") ===
-      //     String(car.getId())
-      // );
 
       const index = carManager
         .getCars()
@@ -295,85 +263,42 @@ const setUI = function (arr) {
   }
 };
 
+const renderCars = function (value) {
+  carManager.setCurrentFilter(value);
+  carManager.filterAndSort();
+  carList.innerHTML = "";
+  setUI(carManager.getCars());
+};
+
 selectAvlbl.addEventListener("input", function (e) {
-  console.log(e.target.value);
-
-  if (e.target.value === "all") {
-    carManager.setCurrentFilter(true);
-    carManager.filterAndSort();
-    carManager.getCars().forEach((car) => console.log(car.getCar()));
-    carList.innerHTML = "";
-    setUI(carManager.getCars());
-  }
-
-  if (e.target.value === "available") {
-    carManager.setCurrentFilter("yes");
-    carManager.filterAndSort();
-    carManager.getCars().forEach((car) => console.log(car.getCar()));
-    carList.innerHTML = "";
-    setUI(carManager.getCars());
-  }
-
-  if (e.target.value === "not-available") {
-    carManager.setCurrentFilter("no");
-    carManager.filterAndSort();
-    carManager.getCars().forEach((car) => console.log(car.getCar()));
-    carList.innerHTML = "";
-    setUI(carManager.getCars());
-  }
+  if (e.target.value === "all") renderCars("all");
+  if (e.target.value === "available") renderCars("yes");
+  if (e.target.value === "not-available") renderCars("no");
 });
 
 selectSort.addEventListener("input", function (e) {
-  console.log(selectSort.value);
-
   if (e.target.value === "a-z") {
-    // prettier-ignore
+    // renderCars("a-z");
     carManager.setCurrentSort("a-z");
     carManager.filterAndSort();
-    console.log(
-      carManager.getFreshCars().forEach((car) => console.log(car.getCar()))
-    );
-
-    carManager.getCars().forEach((car) => console.log(car.getCar()));
     carList.innerHTML = "";
     setUI(carManager.getCars());
   }
-
   if (e.target.value === "z-a") {
-    // prettier-ignore
     carManager.setCurrentSort("z-a");
     carManager.filterAndSort();
-    console.log(
-      carManager.getFreshCars().forEach((car) => console.log(car.getCar()))
-    );
-
-    carManager.getCars().forEach((car) => console.log(car.getCar()));
     carList.innerHTML = "";
     setUI(carManager.getCars());
   }
-
   if (e.target.value === "price-lowest") {
-    // prettier-ignore
     carManager.setCurrentSort("price-lowest");
-    carManager.filterAndSort();
-    console.log(
-      carManager.getFreshCars().forEach((car) => console.log(car.getCar()))
-    );
-
-    carManager.getCars().forEach((car) => console.log(car.getCar()));
+    carManager.filterAndSort("");
     carList.innerHTML = "";
     setUI(carManager.getCars());
   }
-
   if (e.target.value === "price-highest") {
-    // prettier-ignore
     carManager.setCurrentSort("price-highest");
     carManager.filterAndSort();
-    console.log(
-      carManager.getFreshCars().forEach((car) => console.log(car.getCar()))
-    );
-
-    carManager.getCars().forEach((car) => console.log(car.getCar()));
     carList.innerHTML = "";
     setUI(carManager.getCars());
   }
