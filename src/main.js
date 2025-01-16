@@ -160,8 +160,12 @@ const carManagerCreator = function () {
   const filterAndSort = () => {
     freshCars = carsData.map(car => carCreator(car));
 
-    (cars = freshCars.filter((car) => car.getAvlbl() === currentFilter)).sort((a,b) => {});
+    (cars = freshCars.filter((car) => car.getAvlbl() === currentFilter)).sort((a,b) => {
+      if (currentSort === ("z-a")) return (a.getName() < b.getName()) ? 1 : ((b.getName() < a.getName()) ? -1 : 0)
+      if (currentSort === ("a-z")) return (a.getName() > b.getName()) ? 1 : ((b.getName() > a.getName()) ? -1 : 0)});
+ 
   }
+  const getFreshCars = () => freshCars;
 
   const setCurrentFilter = (value) => (currentFilter = value);
   const setCurrentSort = (value) => (currentSort = value);
@@ -175,6 +179,7 @@ const carManagerCreator = function () {
 
   return {
     filterAndSort,
+    getFreshCars,
     setCurrentFilter,
     setCurrentSort,
     addToCars,
@@ -302,13 +307,13 @@ selectAvlbl.addEventListener("input", function (e) {
   if (e.target.value === "all") {
     carList.innerHTML = "";
     carManager.emptyCarsArr();
+    carManager.setCurrentFilter();
+    carManager.filterAndSort();
     defaultUI();
     carManager.getCars().forEach((car) => console.log(car.getCar()));
   }
 
   if (e.target.value === "available") {
-    carManager.emptyCarsArr();
-    defaultUI();
     carManager.setCurrentFilter("yes");
     carManager.filterAndSort();
     carManager.getCars().forEach((car) => console.log(car.getCar()));
@@ -317,8 +322,6 @@ selectAvlbl.addEventListener("input", function (e) {
   }
 
   if (e.target.value === "not-available") {
-    carManager.emptyCarsArr();
-    defaultUI();
     carManager.setCurrentFilter("no");
     carManager.filterAndSort();
     carManager.getCars().forEach((car) => console.log(car.getCar()));
@@ -326,18 +329,36 @@ selectAvlbl.addEventListener("input", function (e) {
     setUI(carManager.getCars());
   }
 });
-// defaultUI();
-// selectSort.addEventListener("input", function (e) {
-//   console.log(selectSort.value);
 
-//   if (e.target.value === "z-a") {
-//     // prettier-ignore
-//     carManager.setCurrentSort(((a,b) => (b.getName() > a.getName()) ? 1 : ((a.getName() > b.getName()) ? -1 : 0)));
-//     carManager.filterAndSort();
-//     console.log(carManager.getCars());
-//     carManager.getCars().forEach((car) => console.log(car.getCar()));
-//   }
-// });
+selectSort.addEventListener("input", function (e) {
+  console.log(selectSort.value);
+
+  if (e.target.value === "a-z") {
+    // prettier-ignore
+    carManager.setCurrentSort("a-z");
+    carManager.filterAndSort();
+    console.log(
+      carManager.getFreshCars().forEach((car) => console.log(car.getCar()))
+    );
+
+    carManager.getCars().forEach((car) => console.log(car.getCar()));
+    carList.innerHTML = "";
+    setUI(carManager.getCars());
+  }
+
+  if (e.target.value === "z-a") {
+    // prettier-ignore
+    carManager.setCurrentSort("z-a");
+    carManager.filterAndSort();
+    console.log(
+      carManager.getFreshCars().forEach((car) => console.log(car.getCar()))
+    );
+
+    carManager.getCars().forEach((car) => console.log(car.getCar()));
+    carList.innerHTML = "";
+    setUI(carManager.getCars());
+  }
+});
 
 // selectAvlbl.addEventListener("input", function (e) {
 //   console.log(e.target.value);
