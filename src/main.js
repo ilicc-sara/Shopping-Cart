@@ -294,17 +294,6 @@ const carList = document.querySelector(".car-list");
 const selectAvlbl = document.querySelector(".select-available");
 const selectSort = document.querySelector(".select-sort");
 
-// {
-//   id: 8,
-//   name: "Lexus IS",
-//   brand: "Lexus",
-//   manufacturedYear: 2019,
-//   doors: 4,
-//   price: 38000,
-//   available: "no",
-//   image: "./images/lexus 8.webp",
-// }
-
 const carCreator = function (car) {
   let id = car.id;
   let name = car.name;
@@ -395,7 +384,11 @@ const renderCars = function () {
 };
 renderCars();
 
-selectSort.addEventListener("input", function (e) {});
+selectSort.addEventListener("input", function (e) {
+  const [key, value] = e.target.value.split("--");
+  console.log(key);
+  console.log(value);
+});
 
 selectAvlbl.addEventListener("input", function (e) {
   const [key, value] = e.target.value.split("-");
