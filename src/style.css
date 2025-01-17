@@ -66,11 +66,18 @@ body {
 }
 
 .available-btn {
-  background-color: green;
   width: 200px;
   text-align: center;
   font-size: 20px;
   padding: 5px 20px;
+}
+
+.btn-available {
+  background-color: green;
+}
+
+.btn-not-available {
+  background-color: rgb(152, 25, 25);
 }
 
 .delete-btn {

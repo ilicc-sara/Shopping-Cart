@@ -7,7 +7,7 @@ const carsData = [
     name: "Toyota Corolla",
     brand: "Toyota",
     manufacturedYear: 2019,
-    doors: 4,
+    doors: "4",
     price: 22000,
     available: "yes",
     image: "./images/first car toyota.jpg",
@@ -17,7 +17,7 @@ const carsData = [
     name: "Honda Civic",
     brand: "Honda",
     manufacturedYear: 2020,
-    doors: 4,
+    doors: "4",
     price: 25000,
     available: "yes",
     image: "./images/honda civic second.webp",
@@ -27,7 +27,7 @@ const carsData = [
     name: "Ford Mustang",
     brand: "Ford",
     manufacturedYear: 2018,
-    doors: 2,
+    doors: "2",
     price: 35000,
     available: "no",
     image: "./images/mustant 3.png",
@@ -37,7 +37,7 @@ const carsData = [
     name: "BMW 3 Series",
     brand: "BMW",
     manufacturedYear: 2021,
-    doors: 4,
+    doors: "4",
     price: 45000,
     available: "yes",
     image: "./images/BMW 3 Series 4.png",
@@ -47,7 +47,7 @@ const carsData = [
     name: "Chevrolet Camaro",
     brand: "Chevrolet",
     manufacturedYear: 2017,
-    doors: 2,
+    doors: "2",
     price: 32000,
     available: "no",
     image: "./images/Chavrolet 5.jpg",
@@ -57,7 +57,7 @@ const carsData = [
     name: "Audi A4",
     brand: "Audi",
     manufacturedYear: 2022,
-    doors: 4,
+    doors: "4",
     price: 42000,
     available: "yes",
     image: "./images/audi a4 6.jpg",
@@ -67,7 +67,7 @@ const carsData = [
     name: "Mercedes-Benz E-Class",
     brand: "Mercedes-Benz",
     manufacturedYear: 2020,
-    doors: 4,
+    doors: "4",
     price: 50000,
     available: "yes",
     image: "./images/mercedes e klasa 7.jpg",
@@ -77,7 +77,7 @@ const carsData = [
     name: "Lexus IS",
     brand: "Lexus",
     manufacturedYear: 2019,
-    doors: 4,
+    doors: "4",
     price: 38000,
     available: "no",
     image: "./images/lexus 8.webp",
@@ -87,7 +87,7 @@ const carsData = [
     name: "Volkswagen Golf",
     brand: "Volkswagen",
     manufacturedYear: 2021,
-    doors: 4,
+    doors: "4",
     price: 28000,
     available: "yes",
     image: "./images/golf 9.jpg",
@@ -97,7 +97,7 @@ const carsData = [
     name: "Subaru Outback",
     brand: "Subaru",
     manufacturedYear: 2022,
-    doors: 4,
+    doors: "4",
     price: 32000,
     available: "yes",
     image: "./images/subaru 10.png",
@@ -328,13 +328,22 @@ const carCreator = function (car) {
 };
 
 const carManagerCreator = function () {
-  const cars = [];
+  let cars = [];
 
   let currentFilter = "all";
   let currentSort = "";
 
   const addCar = (value) => cars.push(value);
   const getCars = () => cars;
+  const setCars = (value) => (cars = value);
+
+  const filterAndSort = (key) => {
+    let freshCars = [...carsData];
+    if (currentFilter === "all") return freshCars;
+
+    freshCars = freshCars.filter((car) => car[key] === currentFilter);
+    return freshCars;
+  };
 
   const getCurrentFilter = () => currentFilter;
   const getCurrentSort = () => currentSort;
@@ -345,6 +354,8 @@ const carManagerCreator = function () {
   return {
     getCars,
     addCar,
+    setCars,
+    filterAndSort,
     getCurrentFilter,
     getCurrentSort,
     setCurrentFilter,
@@ -372,7 +383,9 @@ const renderCars = function () {
     <p>Price:<span>$${car.getPrice()}</span></p>
     </div>
     <div class="availability-cont">
-    <div class="available-btn">Available: <span>${car.getAvlbl()}</span></div>
+    <div class="available-btn ${
+      car.getAvlbl() === "yes" ? "btn-available" : "btn-not-available"
+    }">Available: <span>${car.getAvlbl()}</span></div>
     </div>
     <div class="del-cont">
     <button class="delete-btn">Delete</button>
@@ -381,3 +394,15 @@ const renderCars = function () {
   });
 };
 renderCars();
+
+selectSort.addEventListener("input", function (e) {});
+
+selectAvlbl.addEventListener("input", function (e) {
+  const [key, value] = e.target.value.split("-");
+  console.log(key);
+  console.log(value);
+  carManager.setCurrentFilter(value);
+  const newCars = carManager.filterAndSort(key).map((car) => carCreator(car));
+  carManager.setCars(newCars);
+  renderCars();
+});
