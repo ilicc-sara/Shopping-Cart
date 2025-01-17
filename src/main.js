@@ -326,14 +326,33 @@ const carManagerCreator = function () {
   const getCars = () => cars;
   const setCars = (value) => (cars = value);
 
-  const filterAndSort = (key) => {
+  const filterAndSort = () => {
     let freshCars = [...carsData];
-    if (currentFilter === "all") return freshCars;
+    if (currentFilter === "all")
+      return freshCars.sort((a, b) => {
+        // prettier-ignore
+        if (currentSort === "a-z") return a.name > b.name ? 1 : b.name > a.name ? -1 : 0;
+        // prettier-ignore
+        if (currentSort === "z-a") return a.name < b.name ? 1 : b.name < a.name ? -1 : 0;
+        // prettier-ignore
+        if (currentSort === "price-highest") return a.price < b.price ? 1 : b.price < a.price ? -1 : 0;
+        //prettier-ignore
+        if (currentSort === "price-lowest") return a.price > b.price ? 1 : b.price > a.price ? -1 : 0;
+      });
 
-    freshCars = freshCars.filter((car) => car[key] === currentFilter);
-    return freshCars;
+    freshCars = freshCars.filter((car) => car.available === currentFilter);
+    return freshCars.sort((a, b) => {
+      // prettier-ignore
+      if (currentSort === "a-z") return a.name > b.name ? 1 : b.name > a.name ? -1 : 0;
+      // prettier-ignore
+      if (currentSort === "z-a") return a.name < b.name ? 1 : b.name < a.name ? -1 : 0;
+      // prettier-ignore
+      if (currentSort === "price-highest") return a.price < b.price ? 1 : b.price < a.price ? -1 : 0;
+      //prettier-ignore
+      if (currentSort === "price-lowest") return a.price > b.price ? 1 : b.price > a.price ? -1 : 0;
+    });
   };
-
+  // a.price > b.price ? 1 : b.price > a.price ? -1 : 0
   const getCurrentFilter = () => currentFilter;
   const getCurrentSort = () => currentSort;
 
@@ -388,6 +407,10 @@ selectSort.addEventListener("input", function (e) {
   const [key, value] = e.target.value.split("--");
   console.log(key);
   console.log(value);
+  carManager.setCurrentSort(value);
+  const newCars = carManager.filterAndSort().map((car) => carCreator(car));
+  carManager.setCars(newCars);
+  renderCars();
 });
 
 selectAvlbl.addEventListener("input", function (e) {
@@ -395,7 +418,7 @@ selectAvlbl.addEventListener("input", function (e) {
   console.log(key);
   console.log(value);
   carManager.setCurrentFilter(value);
-  const newCars = carManager.filterAndSort(key).map((car) => carCreator(car));
+  const newCars = carManager.filterAndSort().map((car) => carCreator(car));
   carManager.setCars(newCars);
   renderCars();
 });
