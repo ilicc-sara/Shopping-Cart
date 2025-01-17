@@ -327,21 +327,7 @@ const carManagerCreator = function () {
   const setCars = (value) => (cars = value);
 
   const filterAndSort = () => {
-    let freshCars = [...carsData];
-    if (currentFilter === "all")
-      return freshCars.sort((a, b) => {
-        // prettier-ignore
-        if (currentSort === "a-z") return a.name > b.name ? 1 : b.name > a.name ? -1 : 0;
-        // prettier-ignore
-        if (currentSort === "z-a") return a.name < b.name ? 1 : b.name < a.name ? -1 : 0;
-        // prettier-ignore
-        if (currentSort === "price-highest") return a.price < b.price ? 1 : b.price < a.price ? -1 : 0;
-        //prettier-ignore
-        if (currentSort === "price-lowest") return a.price > b.price ? 1 : b.price > a.price ? -1 : 0;
-      });
-
-    freshCars = freshCars.filter((car) => car.available === currentFilter);
-    return freshCars.sort((a, b) => {
+    let freshCars = [...carsData].sort((a, b) => {
       // prettier-ignore
       if (currentSort === "a-z") return a.name > b.name ? 1 : b.name > a.name ? -1 : 0;
       // prettier-ignore
@@ -351,8 +337,13 @@ const carManagerCreator = function () {
       //prettier-ignore
       if (currentSort === "price-lowest") return a.price > b.price ? 1 : b.price > a.price ? -1 : 0;
     });
+
+    if (currentFilter === "all") return freshCars;
+
+    freshCars = freshCars.filter((car) => car.available === currentFilter);
+    return freshCars;
   };
-  // a.price > b.price ? 1 : b.price > a.price ? -1 : 0
+
   const getCurrentFilter = () => currentFilter;
   const getCurrentSort = () => currentSort;
 
