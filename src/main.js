@@ -329,13 +329,13 @@ const carManagerCreator = function () {
   const filterAndSort = () => {
     let freshCars = [...carsData].sort((a, b) => {
       // prettier-ignore
-      if (currentSort === "a-z") return a.name > b.name ? 1 : b.name > a.name ? -1 : 0;
+      if (currentSort === "a-b") return a.name.localeCompare(b.name);
       // prettier-ignore
-      if (currentSort === "z-a") return a.name < b.name ? 1 : b.name < a.name ? -1 : 0;
+      if (currentSort === "b-a") return b.name.localeCompare(a.name);
       // prettier-ignore
-      if (currentSort === "price-highest") return a.price < b.price ? 1 : b.price < a.price ? -1 : 0;
+      if (currentSort === "price-highest") return a.price - b.price ;
       //prettier-ignore
-      if (currentSort === "price-lowest") return a.price > b.price ? 1 : b.price > a.price ? -1 : 0;
+      if (currentSort === "price-lowest") return b.price - a.price ;
     });
 
     if (currentFilter === "all") return freshCars;
